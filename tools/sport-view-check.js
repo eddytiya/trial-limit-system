@@ -1,0 +1,12 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+class E{constructor(){this.children=[];this.files=[];this.value='';this.hidden=true;this.events={}}append(...v){this.children.push(...v)}replaceChildren(...v){this.children=[...v]}setAttribute(){}addEventListener(k,f){this.events[k]=f}}
+(async()=>{for(const file of ['inventory.html','frontend.html','automatic_frontend.html','slot_frontend.html','workbook_frontend.html']){
+const el={},get=id=>el[id]??=new E();const ctx={document:{getElementById:get,createElement:()=>new E()},Intl,Date,Map,fetch:async()=>({ok:true,json:async()=>({date:'2026-10-22'})})};vm.createContext(ctx);vm.runInContext(fs.readFileSync(require('path').join(__dirname,'..','app',file),'utf8').split('<script>')[1].split('</script>')[0],ctx);await vm.runInContext('dateReady',ctx);
+const b={center:'Club',city:'Mumbai',sport:'Tennis',time:'6pm to 7pm',start:1080,end:1140,division:'Open',capacity:8,workbook_reported_count:0,reference_remaining:8,issues:[],reference_status:'Available'};
+ctx.week={week_start:'2026-10-19',week_end:'2026-10-25',centers:[{center:'Club',city:'Mumbai',sports:['Tennis','Football']},{center:'Club',city:'Pune',sports:['Tennis']}],days:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map((weekday,i)=>({weekday,date:'2026-10-'+(19+i),batches:i===0?[b,{...b,sport:'Football'},{...b,city:'Pune'}]:[]}))};
+vm.runInContext('setupWeekly(week);tab("sportTab")',ctx);assert.equal(get('sportFilter').children.length,2);
+get('sportFilter').value='Tennis';get('sportFilter').events.change();assert.equal(get('sportCenters').children.length,2);assert.match(get('sportSummary').textContent,/2 centers · 2 batch sessions/);assert.equal(get('sportCenters').children[0].children.length,8);
+get('weeklyCenterSearch').value='unrelated';get('weeklyCenterSearch').events.input();assert.equal(get('sportCenters').children.length,2);
+get('sportFilter').value='Football';get('sportFilter').events.change();assert.equal(get('sportCenters').children.length,1);assert.match(get('sportCenters').children[0].children[0].textContent,/Football/);assert.equal(get('sportPanel').hidden,false);assert.equal(get('weeklyPanel').hidden,true);
+vm.runInContext('setupWeekly(week)',ctx);assert.equal(get('sportFilter').value,'Football');vm.runInContext('setupWeekly(null)',ctx);assert.equal(get('sportFilter').disabled,true);console.log(file+': sports, cities, seven days, independent filters, retained selection and empty state passed');
+}})().catch(e=>{console.error(e);process.exitCode=1});

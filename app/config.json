@@ -1,0 +1,7 @@
+{
+  "capacity": 35,
+  "slot_capacity_source": "input/Greenfield Batch & Coach details (1).xlsx",
+  "trial_source": "input/academy___trial_booking___raw_data_2026-10-19T13_17_51.456488991+05_30.xlsx",
+  "raw_trial_status_rule": "booked_only",
+  "enrollment_source": "input/academy___enrollment_data___formatted_report_2026-10-15T15_16_51.527944248+05_30.csv"
+}

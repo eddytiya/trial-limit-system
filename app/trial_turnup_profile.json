@@ -1,0 +1,49 @@
+{
+  "from": "2026-07-23",
+  "through": "2026-10-23",
+  "source": "Historical trial workbook; exact duplicate rows excluded; scheduled date cohort",
+  "sports": {
+    "badminton": {
+      "sport": "Badminton",
+      "booked": 1308,
+      "attended": 259,
+      "known_outcomes": 1141
+    },
+    "basketball": {
+      "sport": "Basketball",
+      "booked": 138,
+      "attended": 13,
+      "known_outcomes": 47
+    },
+    "chess": {
+      "sport": "Chess",
+      "booked": 0,
+      "attended": 0,
+      "known_outcomes": 0
+    },
+    "football": {
+      "sport": "Football",
+      "booked": 393,
+      "attended": 36,
+      "known_outcomes": 122
+    },
+    "skating": {
+      "sport": "Skating",
+      "booked": 3,
+      "attended": 0,
+      "known_outcomes": 2
+    },
+    "tabletennis": {
+      "sport": "Table Tennis",
+      "booked": 1058,
+      "attended": 226,
+      "known_outcomes": 561
+    },
+    "tennis": {
+      "sport": "Tennis",
+      "booked": 514,
+      "attended": 104,
+      "known_outcomes": 335
+    }
+  }
+}

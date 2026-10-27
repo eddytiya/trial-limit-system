@@ -1,0 +1,226 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Center inventory</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7f8;color:#20363e;font:15px 'Segoe UI',Arial,sans-serif}main{max-width:1050px;margin:48px auto;padding:0 24px}h1{font-size:28px;margin:0 0 24px;font-weight:650}.controls{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}input{font:inherit;padding:11px 14px;border:1px solid #d7e0e3;border-radius:8px;background:white;color:inherit}input[type=search]{flex:1;min-width:200px}table{border-collapse:collapse;width:100%;background:white;border:1px solid #dfe7e9}th,td{text-align:left;padding:18px 22px;border-bottom:1px solid #e9eef0}th{font-size:13px;color:#637780;font-weight:600;background:#fafcfc}th:not(:first-child),td:not(:first-child){text-align:right;width:150px}td:not(:first-child){font-size:23px;font-weight:650}small{display:block;font-size:12px;font-weight:400;color:#70818a;margin-top:5px}.empty{text-align:center!important;font-size:15px!important;font-weight:400!important;color:#70818a}.zero{color:#b24a3c}.note{font-size:12px;color:#70818a;line-height:1.6}.error{color:#a93628}caption{text-align:left;padding:0 0 12px;color:#70818a;font-size:13px}@media(max-width:600px){main{margin:24px auto;padding:0 12px}th,td{padding:14px 10px}th:not(:first-child),td:not(:first-child){width:85px}td:not(:first-child){font-size:20px}}
+h2{font-size:20px;margin:28px 0 12px}.alert{padding:14px 18px;border-radius:8px;background:#fff0ec;color:#9b382a;margin-bottom:14px}.table-scroll{overflow-x:auto}#overTable th,#overTable td{width:auto;font-size:14px;white-space:nowrap}#overTable td:first-child{white-space:normal;min-width:180px}#overTable td:last-child{color:#a93628;font-weight:700}#overTable th:nth-child(-n+4),#overTable td:nth-child(-n+4){text-align:left}
+
+[hidden]{display:none!important}.uploads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:26px}.uploads label{display:block;font-weight:600;font-size:13px;margin-bottom:8px}.uploads input{width:100%;min-width:0;font-size:12px;padding:12px;background:white}.tabs{display:flex;gap:8px;margin:24px 0 18px}button{font:inherit;padding:11px 18px;border:1px solid #d7e0e3;border-radius:8px;background:white;color:#34545e;cursor:pointer}button[aria-selected=true]{background:#146c6e;border-color:#146c6e;color:white}caption{font-size:12px}.status{color:#637780;font-size:13px}@media(max-width:700px){.uploads{grid-template-columns:1fr}}
+
+#rows .center-heading th{background:#eaf3f3;color:#20363e;font-size:18px;padding:20px 22px 16px;border-top:2px solid #d7e5e5}#rows .center-heading small{margin-top:4px}#rows .sport-heading th{background:#f6fafa;color:#146c6e;font-size:14px;padding:12px 30px}#rows .batch-row td:first-child{padding-left:40px}@media(max-width:600px){#rows .center-heading th{padding:16px 10px;font-size:17px}#rows .sport-heading th{padding:10px 18px}#rows .batch-row td:first-child{padding-left:24px}}
+
+.date-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.date-controls label{font-weight:600}.date-controls .status{margin:0}#dateNote{margin:0 0 22px}
+
+#rows .completeness-heading th{padding:14px 22px;background:#203f49;color:white;font-size:14px}#rows .completeness-heading.completeness-1 th{background:#765817}#rows .completeness-heading.completeness-2 th{background:#645c5a}.batch-status{font-size:11px;line-height:1.5}.batch-status.completeness-0{color:#146c6e}.batch-status.completeness-1{color:#856018}.batch-status.completeness-2{color:#8a5145}
+
+.tabs{flex-wrap:wrap}.weekly-controls{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin:18px 0}.weekly-controls label{display:block;font-size:13px;font-weight:600;margin-bottom:8px}select{font:inherit;width:100%;padding:12px;border:1px solid #d7e0e3;border-radius:8px;background:white;color:inherit}.week-day{margin:20px 0;background:white;border:1px solid #dfe7e9;border-radius:8px;overflow:hidden}.week-day h3{margin:0;padding:16px 20px;background:#eaf3f3;font-size:16px}.week-day h3 small{display:inline;margin-left:10px}.week-table{border:0;min-width:700px}.week-table th,.week-table td{width:auto!important;font-size:14px!important;padding:14px 16px}.week-table th:nth-child(-n+3),.week-table td:nth-child(-n+3),.week-table th:last-child,.week-table td:last-child{text-align:left}.week-table td:last-child{font-weight:400;min-width:210px}.week-table caption{padding:12px 16px 0}.week-empty{padding:18px 20px;color:#70818a;font-size:14px}.week-title{margin-bottom:6px}#weeklySummary{margin:0 0 18px}.week-table .review{color:#856018}.week-table .over{color:#b24a3c}@media(max-width:600px){.weekly-controls{grid-template-columns:1fr}.week-day h3 small{display:block;margin-left:0}}
+
+.center-picker{min-width:0}.center-picker input{display:block;width:100%;margin:0 0 12px;font-size:16px;color:#20363e;background:#fff}.center-picker input:focus{outline:3px solid #b8dddd;border-color:#146c6e}.center-picker .center-list-label{font-size:12px;color:#637780}#weeklyCenter{padding:6px;max-width:100%;height:174px;overflow:auto}#weeklyCenter option{padding:10px 12px;border-radius:4px}#centerSearchStatus{font-size:12px;margin:8px 0 0}
+
+.sport-center{margin-top:28px;padding-top:8px;border-top:2px solid #d7e5e5}.sport-center>h2{padding:16px;background:#eaf3f3;border-radius:8px;line-height:1.5}
+
+#sportPanel button[aria-pressed=true]{background:#146c6e;border-color:#146c6e;color:white}#sportOverSection th,#sportOverSection td{white-space:nowrap;text-align:left}#sportOverSection td:nth-child(n+5),#sportOverSection th:nth-child(n+5){text-align:right}#sportOverSection td:last-child{font-weight:650;color:#b24a3c}
+
+.center-toggle{display:block;margin-top:12px;padding:8px 12px;font-size:13px;background:white;color:#146c6e}.center-toggle:focus-visible,.sport-center>summary:focus-visible{outline:3px solid #146c6e;outline-offset:3px}.sport-center>summary{padding:18px;background:#eaf3f3;border-radius:8px;font-size:18px;font-weight:600;cursor:pointer;line-height:1.5}.sport-center:not([open]){padding-bottom:0}.sport-center>summary small{display:block;font-size:12px}
+
+#rows .center-heading th,#rows .completeness-heading th{position:relative;padding-right:66px}#rows .center-toggle,#rows .group-toggle{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0 26px;border:0;border-radius:0;background:transparent;color:#146c6e;display:flex;align-items:center;justify-content:flex-end;cursor:pointer}#rows .group-toggle{color:white}#rows .center-toggle::after,#rows .group-toggle::after{content:'';width:12px;height:12px;border-right:3px solid currentColor;border-bottom:3px solid currentColor;transform:rotate(45deg);transition:transform .15s}#rows button[aria-expanded=true]::after{transform:rotate(225deg)}#rows .center-toggle:hover{background:rgba(20,108,110,.04)}#rows .group-toggle:hover{background:rgba(255,255,255,.07)}#rows .center-toggle:focus-visible,#rows .group-toggle:focus-visible{outline:3px solid #146c6e;outline-offset:-4px}#rows .group-toggle:focus-visible{outline-color:white}
+
+.report-search{margin:16px 0}.report-search label{display:block;font-weight:600;font-size:13px;margin-bottom:8px}.report-search input{display:block;width:100%;font-size:16px}.report-search input:focus{outline:3px solid #b8dddd;border-color:#146c6e}
+</style></head><body><main><h1>Center inventory</h1>
+<div class="uploads"><div><label for="enrollment">Enrollment CSV</label><input id="enrollment" type="file" accept=".csv"></div><div><label for="trials">Trial bookings</label><input id="trials" type="file" accept=".csv,.xlsx"></div><div><label for="capacity">Capacity schedule</label><input id="capacity" type="file" accept=".csv,.xlsx"></div></div>
+<div class="date-controls"><label for="referenceDate">Analysis date</label><input id="referenceDate" type="date" required aria-describedby="selectedWeekday dateNote"><p id="selectedWeekday" class="status" aria-live="polite"></p></div><p id="dateNote" class="note">Select a date to view its weekday’s batches, capacities and reported counts from the uploaded schedule. Centers are ordered by complete, partial, then missing data. Missing data means capacity, reported count and proficiency are all absent.</p>
+<p id="error" class="error" role="alert" hidden></p><p id="loading" class="status" role="status" hidden>Loading files…</p>
+<div id="results" hidden><div class="tabs" role="tablist" aria-label="Inventory views"><button id="inventoryTab" role="tab" aria-controls="inventoryPanel" aria-selected="true">Daily report</button><button id="overTab" role="tab" aria-controls="overPanel" aria-selected="false" tabindex="-1">Over-capacity batches</button><button id="weeklyTab" role="tab" aria-controls="weeklyPanel" aria-selected="false" tabindex="-1">Weekly center view</button><button id="sportTab" role="tab" aria-controls="sportPanel" aria-selected="false" tabindex="-1">Sport view</button></div>
+<section id="inventoryPanel" role="tabpanel" aria-labelledby="inventoryTab"><div class="report-search"><label for="dailySearch">Search daily report</label><input id="dailySearch" type="search" placeholder="Center, sport, batch, timing, proficiency or status…" autocomplete="off"></div><p id="dailySearchStatus" class="status" role="status"></p><div class="table-scroll"><table><caption id="day"></caption><thead><tr><th>Center / sport / batch</th><th>Capacity</th><th>Places left</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<section id="overPanel" role="tabpanel" aria-labelledby="overTab" hidden><div class="report-search"><label for="overSearch">Search over-capacity batches</label><input id="overSearch" type="search" placeholder="Center, sport, batch, timing, proficiency or status…" autocomplete="off"></div><p id="overSearchStatus" class="status" role="status"></p><div class="table-scroll"><table id="overTable"><caption id="overDay"></caption><thead><tr><th>Center / sport</th><th>Batch</th><th>Day</th><th>Timing</th><th>Capacity</th><th>Reported count</th><th>Over by</th></tr></thead><tbody id="overRows"></tbody></table></div></section>
+<section id="weeklyPanel" role="tabpanel" aria-labelledby="weeklyTab" hidden>
+<p id="weekRange" class="status"></p>
+<div class="weekly-controls"><div class="center-picker"><label for="weeklyCenterSearch">Search centers</label><input id="weeklyCenterSearch" type="search" autocomplete="off" placeholder="Type a center name or city, e.g. Nahar" aria-controls="weeklyCenter" aria-describedby="centerSearchStatus"><label for="weeklyCenter" class="center-list-label">Matching centers</label><select id="weeklyCenter" size="5" aria-describedby="centerSearchStatus"></select><p id="centerSearchStatus" class="status" role="status"></p></div><div><label for="weeklySport">Filter centers by sport</label><select id="weeklySport"></select></div></div>
+<h2 id="weeklyCenterTitle" class="week-title"></h2><p id="weeklySummary" class="status" aria-live="polite"></p>
+<p class="note">The week containing the analysis date is shown Monday to Sunday. Counts are the uploaded schedule’s reported weekday snapshot. On-hold batches and missing values are marked for review.</p>
+<div class="report-search"><label for="weeklyBatchSearch">Search this center’s weekly batches</label><input id="weeklyBatchSearch" type="search" placeholder="Center, sport, batch, timing, proficiency or status…" autocomplete="off"></div><div id="weeklyDays"></div>
+</section>
+<section id="sportPanel" role="tabpanel" aria-labelledby="sportTab" hidden>
+<div class="weekly-controls"><div><label for="sportFilter">Select a sport</label><select id="sportFilter" aria-controls="sportCenters"></select></div></div>
+<h2 id="sportTitle"></h2><p id="sportSummary" class="status" role="status"></p>
+<p class="note">All centers offering the selected sport, with Monday-to-Sunday batches for the week containing the analysis date. Counts use the uploaded schedule’s reported weekday snapshot.</p>
+<div class="tabs" role="group" aria-label="Sport report sections"><button id="sportAllButton" aria-pressed="true" aria-controls="sportAllSection">All data</button><button id="sportOverButton" aria-pressed="false" aria-controls="sportOverSection">Over capacity</button></div>
+<section id="sportAllSection" aria-labelledby="sportAllButton"><div class="report-search"><label for="sportAllSearch">Search all sport data</label><input id="sportAllSearch" type="search" placeholder="Center, sport, batch, timing, proficiency or status…" autocomplete="off"></div><div id="sportCenters"></div></section>
+<section id="sportOverSection" aria-labelledby="sportOverButton" hidden><h2>Over-capacity centers and slots</h2><div class="report-search"><label for="sportOverSearch">Search this sport’s over-capacity slots</label><input id="sportOverSearch" type="search" placeholder="Center, sport, batch, timing, proficiency or status…" autocomplete="off"></div><p class="note">Reported intake exceeds capacity. Shows each affected center, day, timing, proficiency and excess count. On-hold and unresolved batches remain in All data.</p><p id="sportOverSummary" class="status" role="status"></p><div class="table-scroll"><table class="week-table"><caption>Over-capacity slots for the selected sport and week</caption><thead><tr><th>Center / city</th><th>Day / date</th><th>Timing</th><th>Proficiency</th><th>Capacity</th><th>Reported intake</th><th>Over by</th></tr></thead><tbody id="sportOverRows"></tbody></table></div></section>
+</section></div>
+</main><script>
+const $=id=>document.getElementById(id);let version=0;
+const cell=(tag,text)=>{const el=document.createElement(tag);el.textContent=text;return el};
+// User-confirmed display grouping; source labels and capacity pools remain intact.
+const naharLabels=new Set(['Nahar International School','Nahar International School, Powai','Nahar International School Basic Batch (Powai)','Nahar International School Elite Batch (Powai)']);
+const centerName=b=>b.city==='Mumbai'&&naharLabels.has(b.center)?'Nahar International School, Powai':b.center;
+const centerDisplay=b=>[centerName(b),...(b.full_center_names||[]).filter(name=>name!==centerName(b))].join(' — ');
+function naharBatchGroup(b){return b.city==='Mumbai'&&b.sport==='Football'?(b.center==='Nahar International School Basic Batch (Powai)'?'Basic batch':b.center==='Nahar International School Elite Batch (Powai)'?'Elite batch':''):''}
+function empty(id,cols,text){const tr=document.createElement('tr'),td=cell('td',text);td.colSpan=cols;td.className='empty';tr.append(td);$(id).append(tr)}
+const completenessLabels=['Complete data','Partial data','Missing data'];
+const hasText=value=>typeof value==='string'&&value.trim().length>0;
+const hasCount=value=>typeof value==='number'&&Number.isFinite(value)&&value>=0;
+function batchCompleteness(batch){
+ const fields=[hasCount(batch.capacity),hasCount(batch.workbook_reported_count),hasText(batch.division)];
+ if(!fields.some(Boolean))return 2;
+ return fields.every(Boolean)&&hasText(batch.time)&&hasText(batch.sport)&&hasText(batch.center)&&hasText(batch.city)&&hasCount(batch.reference_remaining)&&!(batch.issues||[]).length?0:1;
+}
+function groupCompleteness(batches){const ranks=batches.map(batchCompleteness);return ranks.every(rank=>rank===0)?0:ranks.every(rank=>rank===2)?2:1}
+function batchDetails(batch){
+ const missing=[];
+ if(!hasCount(batch.capacity))missing.push('capacity');
+ if(!hasCount(batch.workbook_reported_count))missing.push('reported count');
+ if(!hasText(batch.division))missing.push('proficiency');
+ if(!hasText(batch.time))missing.push('timing');
+ if(!hasText(batch.sport))missing.push('sport');
+ if(!hasText(batch.city))missing.push('city');
+ const details=[completenessLabels[batchCompleteness(batch)]];if(naharBatchGroup(batch))details.push(naharBatchGroup(batch));
+ if(missing.length)details.push('Missing: '+missing.join(', '));
+ if((batch.issues||[]).length)details.push(...batch.issues);
+ else if(!hasCount(batch.reference_remaining)&&batchCompleteness(batch)!==2)details.push('Places left unavailable');
+ return details.join(' · ');
+}
+let lastReport=null;
+const normalizeSearch=value=>String(value??'').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+function matchesBatch(batch,query,day={}){
+ const tokens=normalizeSearch(query).split(/\s+/).filter(Boolean);if(!tokens.length)return true;
+ const text=normalizeSearch([batch.center,centerDisplay(batch),...(batch.full_center_names||[]),batch.city,batch.sport,batch.time,batch.division,batch.days,batch.weekday,batch.reference_date,day.weekday,day.date,batch.reference_status,batch.capacity,batch.workbook_reported_count,batch.reference_remaining,batch.reference_excess,batchDetails(batch)].filter(value=>value!==undefined&&value!==null).join(' '));
+ return tokens.every(token=>text.includes(token));
+}
+function syncCenterGroup(group){
+ group.toggle.setAttribute('aria-expanded',String(group.expanded));
+ for(const center of group.centers){center.heading.hidden=!group.expanded;for(const row of center.childRows)row.hidden=!group.expanded||!center.expanded;center.toggle.setAttribute('aria-expanded',String(center.expanded))}
+}
+function draw(data){lastReport=data;const dailyMatches=data.batches.filter(b=>matchesBatch(b,$('dailySearch').value));$('dailySearchStatus').textContent=dailyMatches.length+' of '+data.batches.length+' batches';$('rows').replaceChildren();$('overRows').replaceChildren();const caption=data.weekday+' · '+data.reference_date+' · Reported snapshot';$('day').textContent=caption;$('overDay').textContent=caption;
+ const centers=new Map();
+ for(const b of dailyMatches){const key=JSON.stringify([centerName(b),b.city||'']);if(!centers.has(key))centers.set(key,{name:centerName(b),city:b.city,fullNames:new Set(),sports:new Map()});for(const name of b.full_center_names||[])centers.get(key).fullNames.add(name);const sports=centers.get(key).sports;const sport=b.sport||'Other sports';if(!sports.has(sport))sports.set(sport,[]);sports.get(sport).push(b)}
+ const orderedCenters=[...centers.values()].map(center=>({...center,rank:groupCompleteness([...center.sports.values()].flat())})).sort((a,b)=>a.rank-b.rank||a.name.localeCompare(b.name)||String(a.city||'').localeCompare(String(b.city||'')));
+ let lastRank=-1,centerIndex=0,currentGroup=null;
+ for(const center of orderedCenters){
+  if(center.rank!==lastRank){const tr=document.createElement('tr'),title=cell('th',completenessLabels[center.rank]+' · '+orderedCenters.filter(c=>c.rank===center.rank).length+(orderedCenters.filter(c=>c.rank===center.rank).length===1?' center':' centers'));tr.className='completeness-heading completeness-'+center.rank;title.colSpan=3;const group={expanded:true,centers:[],toggle:cell('button','')};group.toggle.type='button';group.toggle.className='group-toggle';group.toggle.setAttribute('aria-label',completenessLabels[center.rank]+': expand or collapse centers');group.toggle.setAttribute('aria-expanded','true');group.toggle.onclick=()=>{group.expanded=!group.expanded;syncCenterGroup(group)};title.append(group.toggle);tr.append(title);$('rows').append(tr);lastRank=center.rank;currentGroup=group}
+  const heading=document.createElement('tr'),name=cell('th',center.name);heading.className='center-heading';name.colSpan=3;name.append(cell('small',[[...center.fullNames].filter(full=>full!==center.name).join(' / '),center.city,[...center.sports.keys()].join(', '),completenessLabels[center.rank]].filter(Boolean).join(' · ')));const childRows=[],toggle=cell('button','');toggle.type='button';toggle.className='center-toggle';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-label',center.name+': show or hide batches');name.append(toggle);heading.append(name);$('rows').append(heading);
+  const idPrefix='daily-center-'+centerIndex++;heading.id=idPrefix;const centerState={heading,childRows,toggle,expanded:!!$('dailySearch').value.trim()};const group=currentGroup;group.centers.push(centerState);let rowIndex=0;
+  const appendCenterRow=row=>{row.id=idPrefix+'-'+rowIndex++;row.hidden=!centerState.expanded;childRows.push(row);$('rows').append(row)};
+  toggle.onclick=()=>{centerState.expanded=!centerState.expanded;syncCenterGroup(group)};
+  for(const [sport,batches] of [...center.sports].sort((a,b)=>groupCompleteness(a[1])-groupCompleteness(b[1])||a[0].localeCompare(b[0]))){
+   const heading=document.createElement('tr'),name=cell('th',sport);heading.className='sport-heading';name.colSpan=3;heading.append(name);appendCenterRow(heading);
+   for(const b of [...batches].sort((a,b)=>batchCompleteness(a)-batchCompleteness(b))){const tr=document.createElement('tr'),batch=cell('td',(b.sport||'Sport not supplied')+' · '+(b.time||'Timing unavailable'));tr.className='batch-row';batch.append(cell('small',b.division||'Proficiency not supplied'));const status=cell('small',batchDetails(b));status.className='batch-status completeness-'+batchCompleteness(b);batch.append(status);const left=cell('td',b.reference_remaining??'—');if(b.reference_remaining===0)left.className='zero';tr.append(batch,cell('td',b.capacity??'—'),left);appendCenterRow(tr)}
+  }
+  toggle.setAttribute('aria-controls',childRows.map(row=>row.id).join(' '));group.toggle.setAttribute('aria-controls',group.centers.flatMap(c=>[c.heading.id,...c.childRows.map(row=>row.id)]).join(' '));
+ }
+ const overBatches=data.batches.filter(b=>b.reference_status==='Over Capacity'&&b.reference_excess>0);const exceeded=overBatches.filter(b=>matchesBatch(b,$('overSearch').value)).sort((a,b)=>b.reference_excess-a.reference_excess);
+ for(const b of exceeded){const tr=document.createElement('tr'),center=cell('td',centerDisplay(b));center.append(cell('small',[b.city,b.sport].filter(Boolean).join(' · ')));tr.append(center,...[b.division||'—',b.weekday,b.time,b.capacity,b.workbook_reported_count,b.reference_excess].map(v=>cell('td',v)));$('overRows').append(tr)}
+ $('overSearchStatus').textContent=exceeded.length+' of '+overBatches.length+' over-capacity batches';
+ if(!dailyMatches.length)empty('rows',3,$('dailySearch').value.trim()?'No batches match your search.':'No centers to display.');if(!exceeded.length)empty('overRows',7,$('overSearch').value.trim()?'No over-capacity batches match your search.':'No over-capacity batches.');
+}
+const viewTabs=[['inventoryTab','inventoryPanel'],['overTab','overPanel'],['weeklyTab','weeklyPanel'],['sportTab','sportPanel']];
+let activeView='inventoryTab',weeklyData=null;
+function tab(view){const id=typeof view==='boolean'?(view?'overTab':'inventoryTab'):view;activeView=id;for(const [tabId,panelId] of viewTabs){const selected=tabId===id;$(panelId).hidden=!selected;$(tabId).setAttribute('aria-selected',String(selected));$(tabId).tabIndex=selected?0:-1}}
+for(const [id] of viewTabs){$(id).onclick=()=>tab(id);$(id).onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const index=viewTabs.findIndex(([tabId])=>tabId===id);const next=e.key==='Home'?0:e.key==='End'?viewTabs.length-1:(index+(e.key==='ArrowRight'?1:-1)+viewTabs.length)%viewTabs.length;tab(viewTabs[next][0]);$(viewTabs[next][0]).focus()}}}
+const centerKey=b=>JSON.stringify([centerName(b),b.city||'']);
+function option(value,label){const el=cell('option',label);el.value=value;return el}
+function centerSports(center){return center.sports?.length?center.sports:[...new Set((weeklyData?.days||[]).flatMap(day=>day.batches).filter(b=>centerKey(b)===centerKey(center)).map(b=>b.sport).filter(Boolean))].sort((a,b)=>a.localeCompare(b))}
+function centerLabel(center){return [centerDisplay(center),center.city,centerSports(center).join(', ')].filter(Boolean).join(' · ')}
+function setupWeekly(weekly){
+ weeklyData=weekly;
+ if(weekly){const grouped=new Map();for(const center of weekly.centers){const key=centerKey(center);if(!grouped.has(key))grouped.set(key,{...center,center:centerName(center),sports:[],full_center_names:[]});const group=grouped.get(key);group.full_center_names=[...new Set([...group.full_center_names,...(center.full_center_names||[])])];group.sports=[...new Set([...group.sports,...centerSports(center)])].sort((a,b)=>a.localeCompare(b))}weeklyData={...weekly,centers:[...grouped.values()]}}
+ $('weekRange').textContent=weekly?'Week: '+weekly.week_start+' to '+weekly.week_end:'';
+ setupWeeklySports();
+ filterWeeklyCenters();
+ setupSportView();
+}
+function filterWeeklyCenters(){
+ const previous=$('weeklyCenter').value,query=$('weeklyCenterSearch').value.trim().toLocaleLowerCase();
+ const all=weeklyData?.centers||[];
+ const selectedSport=$('weeklySport').value;
+ const centers=all.filter(center=>centerLabel(center).toLocaleLowerCase().includes(query)&&(selectedSport==='*'||centerSports(center).includes(selectedSport)));
+ $('weeklyCenter').replaceChildren();
+ for(const center of centers)$('weeklyCenter').append(option(centerKey(center),centerLabel(center)));
+ if(!centers.length)$('weeklyCenter').append(option('','No matching centers'));
+ $('weeklyCenter').disabled=!centers.length;
+ $('weeklyCenter').value=centers.some(c=>centerKey(c)===previous)?previous:centers.length?centerKey(centers[0]):'';
+ $('centerSearchStatus').textContent=centers.length+' of '+all.length+' centers'+(query?' match your search':'')+(selectedSport!=='*'?' · '+selectedSport:'');
+ drawWeekly();
+}
+function setupWeeklySports(){
+ const previous=$('weeklySport').value;
+ const sports=[...new Set((weeklyData?.centers||[]).flatMap(center=>centerSports(center)))].sort((a,b)=>a.localeCompare(b));
+ $('weeklySport').replaceChildren(option('*','All sports'),...sports.map(sport=>option(sport,sport||'Sport not supplied')));
+ $('weeklySport').value=sports.includes(previous)?previous:'*';$('weeklySport').disabled=!sports.length;
+}
+function drawWeekly(){
+ $('weeklyDays').replaceChildren();
+ const selected=(weeklyData?.centers||[]).find(c=>centerKey(c)===$('weeklyCenter').value);
+ $('weeklyCenterTitle').textContent=selected?centerLabel(selected):'No centers to display';
+ if(!selected){$('weeklySummary').textContent='No weekly center data available.';return}
+ let total=0,scheduledDays=0;
+ for(const day of weeklyData.days){
+  const batches=day.batches.filter(b=>centerKey(b)===$('weeklyCenter').value&&($('weeklySport').value==='*'||(b.sport||'')===$('weeklySport').value)&&matchesBatch(b,$('weeklyBatchSearch').value,day));
+  total+=batches.length;if(batches.length)scheduledDays++;
+  $('weeklyDays').append(weeklyDaySection(day,batches,!!$('weeklyBatchSearch').value.trim()));
+ }
+ $('weeklySummary').textContent=total+' batch sessions across '+scheduledDays+' scheduled days · '+($('weeklySport').value==='*'?'All sports':$('weeklySport').value);
+}
+function weeklyDaySection(day,batches,searching=false){
+  const section=document.createElement('section');section.className='week-day';const title=cell('h3',day.weekday);title.append(cell('small',day.date));section.append(title);
+  if(!batches.length){const empty=cell('p',searching?'No matching batches for this day.':'No scheduled batches for this selection.');empty.className='week-empty';section.append(empty)}
+  else{
+   const scroll=document.createElement('div');scroll.className='table-scroll';const table=document.createElement('table');table.className='week-table';const caption=cell('caption',day.weekday+' batch details');table.append(caption);
+   const head=document.createElement('thead'),header=document.createElement('tr');for(const label of ['Sport','Timing','Proficiency','Capacity','Reported count','Places left','Status / details']){const th=cell('th',label);th.scope='col';header.append(th)}head.append(header);table.append(head);
+   const body=document.createElement('tbody');
+   for(const b of [...batches].sort((a,b)=>(a.start??Infinity)-(b.start??Infinity)||(a.end??Infinity)-(b.end??Infinity)||String(a.sport||'').localeCompare(String(b.sport||'')))){
+    const row=document.createElement('tr');
+    const proficiency=cell('td',b.division||'Not supplied');if(!b.division&&b.days)proficiency.append(cell('small','Schedule note: '+b.days));
+    const status=cell('td',(b.reference_status||'Needs review')+' · '+batchDetails(b));status.className=b.reference_status==='Over Capacity'?'over':batchCompleteness(b)!==0?'review':'';
+    const left=cell('td',b.reference_remaining??'—');if(b.reference_remaining===0)left.className='zero';
+    row.append(cell('td',b.sport||'Not supplied'),cell('td',(b.time||'Not supplied')+' · '+(b.sport||'Sport not supplied')),proficiency,cell('td',b.capacity??'—'),cell('td',b.workbook_reported_count??'—'),left,status);body.append(row);
+   }
+   table.append(body);scroll.append(table);section.append(scroll);
+  }
+ return section;
+}
+function setupSportView(){
+ const previous=$('sportFilter').value;
+ const sports=[...new Set([...(weeklyData?.centers||[]).flatMap(center=>centerSports(center)),...(weeklyData?.days||[]).flatMap(day=>day.batches.map(b=>b.sport)).filter(Boolean)])].sort((a,b)=>a.localeCompare(b));
+ $('sportFilter').replaceChildren(...sports.map(sport=>option(sport,sport)));
+ $('sportFilter').disabled=!sports.length;
+ $('sportFilter').value=sports.includes(previous)?previous:sports[0]||'';
+ drawSportView();
+}
+function sportSection(available){$('sportAllSection').hidden=available;$('sportOverSection').hidden=!available;$('sportAllButton').setAttribute('aria-pressed',String(!available));$('sportOverButton').setAttribute('aria-pressed',String(available))}
+$('sportAllButton').onclick=()=>sportSection(false);$('sportOverButton').onclick=()=>sportSection(true);
+function drawSportOverCapacity(sport){
+ $('sportOverRows').replaceChildren();
+ const slots=(weeklyData?.days||[]).flatMap(day=>day.batches.filter(b=>matchesBatch(b,$('sportOverSearch').value,day)&&b.sport===sport&&b.reference_status==='Over Capacity'&&hasCount(b.capacity)&&hasCount(b.workbook_reported_count)&&b.workbook_reported_count>b.capacity&&!(b.issues||[]).length).map(batch=>({...batch,dayName:day.weekday,dayDate:day.date})));
+ slots.sort((a,b)=>a.center.localeCompare(b.center)||String(a.city||'').localeCompare(String(b.city||''))||a.dayDate.localeCompare(b.dayDate)||(a.start??Infinity)-(b.start??Infinity));
+ for(const b of slots){const row=document.createElement('tr'),center=cell('td',centerDisplay(b));center.append(cell('small',b.city||''));const day=cell('td',b.dayName);day.append(cell('small',b.dayDate));row.append(center,day,...[b.time,b.division,b.capacity,b.workbook_reported_count,b.workbook_reported_count-b.capacity].map(value=>cell('td',value)));$('sportOverRows').append(row)}
+ $('sportOverSummary').textContent=new Set(slots.map(centerKey)).size+' centers · '+slots.length+' over-capacity slots';
+ if(!slots.length)empty('sportOverRows',7,'No confirmed over-capacity slots for this sport and week.');
+}
+function drawSportView(){
+ $('sportCenters').replaceChildren();const sport=$('sportFilter').value;drawSportOverCapacity(sport);
+ $('sportTitle').textContent=sport?sport+' · All centers':'No sports available';
+ const centers=(weeklyData?.centers||[]).filter(center=>centerSports(center).includes(sport)).map(center=>({...center,batches:(weeklyData?.days||[]).flatMap(day=>day.batches.filter(b=>centerKey(b)===centerKey(center)&&b.sport===sport&&matchesBatch(b,$('sportAllSearch').value,day)))})).filter(center=>!$('sportAllSearch').value.trim()||center.batches.length);
+ centers.sort((a,b)=>groupCompleteness(a.batches)-groupCompleteness(b.batches)||a.center.localeCompare(b.center)||a.city.localeCompare(b.city));
+ let total=0;
+ for(const center of centers){
+  const section=document.createElement('details');section.className='sport-center';section.open=!!$('sportAllSearch').value.trim();
+  const heading=cell('summary',[centerDisplay(center),center.city,sport].filter(Boolean).join(' · '));heading.append(cell('small',center.batches.length+' batch sessions · Click to show or hide details'));section.append(heading);
+  total+=center.batches.length;
+  for(const day of weeklyData.days){const batches=day.batches.filter(b=>centerKey(b)===centerKey(center)&&b.sport===sport&&matchesBatch(b,$('sportAllSearch').value,day));section.append(weeklyDaySection(day,batches,!!$('sportAllSearch').value.trim()))}
+  $('sportCenters').append(section);
+ }
+ $('sportSummary').textContent=centers.length+' centers · '+total+' batch sessions'+(weeklyData?' · '+weeklyData.week_start+' to '+weeklyData.week_end:'');
+ if(!centers.length){const empty=cell('p',$('sportAllSearch').value.trim()?'No batches match your search for this sport.':'No centers available for this sport.');empty.className='status';$('sportCenters').append(empty)}
+}
+for(const id of ['dailySearch','overSearch'])$(id).addEventListener('input',()=>{if(lastReport)draw(lastReport)});
+$('weeklyBatchSearch').addEventListener('input',drawWeekly);
+$('sportAllSearch').addEventListener('input',drawSportView);
+$('sportOverSearch').addEventListener('input',()=>drawSportOverCapacity($('sportFilter').value));
+$('sportFilter').addEventListener('change',drawSportView);
+$('weeklyCenterSearch').addEventListener('input',filterWeeklyCenters);
+$('weeklyCenter').addEventListener('change',drawWeekly);$('weeklySport').addEventListener('change',filterWeeklyCenters);
+async function source(kind,file){const ext=file.name.toLowerCase().split('.').pop();if(kind==='enrollment'&&ext!=='csv'||kind!=='enrollment'&&!['csv','xlsx'].includes(ext))throw Error('Choose CSV for enrollment and CSV or XLSX for the other files.');const nameKey=kind==='enrollment'?'filename':kind==='trials'?'trials_filename':'capacity_filename';const value={[nameKey]:file.name};if(ext==='csv')value[kind==='enrollment'?'csv_text':kind==='trials'?'trials_text':'capacity_text']=await file.text();else{const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));value[kind==='trials'?'trials_xlsx':'capacity_xlsx']=btoa(binary)}return value}
+function showSelectedDate(){const value=$('referenceDate').value;$('selectedWeekday').textContent=value?new Intl.DateTimeFormat('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(value+'T00:00:00Z')):''}
+const dateReady=(async()=>{try{const response=await fetch('/api/info');if(!response.ok)throw Error('Unable to load today’s date. Select an analysis date.');const info=await response.json();if(!$('referenceDate').value)$('referenceDate').value=info.date;showSelectedDate()}catch(error){if(!$('referenceDate').value){$('error').textContent=error.message;$('error').hidden=false}}})();
+async function load(){const current=++version;const selectedView=activeView;$('results').hidden=true;$('error').hidden=true;$('loading').hidden=true;$('rows').replaceChildren();$('overRows').replaceChildren();$('weeklyDays').replaceChildren();$('sportCenters').replaceChildren();const files=['enrollment','trials','capacity'].map(id=>$(id).files[0]);if(files.some(f=>!f))return;$('loading').hidden=false;try{await dateReady;if(current!==version)return;const referenceDate=$('referenceDate').value;if(!referenceDate||!$('referenceDate').checkValidity())throw Error('Select a valid analysis date.');const parts=await Promise.all(files.map((f,i)=>source(['enrollment','trials','capacity'][i],f)));if(current!==version)return;const response=await fetch('/api/schedule',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({reference_date:referenceDate,include_weekly:true},...parts))});const data=await response.json();if(current!==version)return;if(!response.ok)throw Error(data.error||'Unable to read files.');draw(data);setupWeekly(data.weekly);tab(selectedView);$('results').hidden=false}catch(error){if(current!==version)return;$('error').textContent=error.message;$('error').hidden=false}finally{if(current===version)$('loading').hidden=true}}
+$('referenceDate').addEventListener('change',()=>{showSelectedDate();load()});
+for(const id of ['enrollment','trials','capacity'])$(id).addEventListener('change',load);
+</script></body></html>
