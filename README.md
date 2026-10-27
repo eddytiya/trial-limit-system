@@ -52,7 +52,7 @@ The **Batch calculation** panel includes blank CSV templates and expandable **Fi
 
 Slots retain their original weekday/time strings, such as `Monday 6:00 PM - 7:00 PM`. Download the templates for the exact CSV column names.
 
-A fresh clone does not contain local source snapshots or approved mappings. Use your own exports. For configured-file views, place the required sources in `input/` and update `app/config.json`; relative paths resolve from the project folder. The configured historical capacity filename may be absent, so upload current snapshots for the upload workflow. Restore authorized mapping records into `mapped/` when needed.
+A fresh clone contains fictional demonstration CSVs; see [Sample data instructions](docs/SAMPLE_DATA.md). Real source snapshots and local approved mappings are excluded. For configured-file views, place the required sources in `input/` and update `app/config.json`; relative paths resolve from the project folder. The configured historical capacity filename may be absent, so upload current snapshots for the upload workflow. Restore authorized mapping records into `mapped/` when needed.
 
 ## How counts work
 

@@ -10,8 +10,13 @@ htmlcov/
 # Local source snapshots, mapping records, and generated reports
 /input/*
 !/input/.gitkeep
+!/input/sample_enrollment.csv
+!/input/sample_trials.csv
+!/input/sample_capacity.csv
 /mapped/*
 !/mapped/.gitkeep
+!/mapped/sample_matching.csv
+!/mapped/sample_batch_mappings.json
 /outputs/
 /reports/
 

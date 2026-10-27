@@ -1,0 +1,7 @@
+Academy,Coaching Center,Age Category,Course Details,Trial Scheduled Date,Start Time,End Time,Status,Player DB ID,Trial Booking ID
+Demo Football Academy,Demo Centre 1,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,booked,DEMO-P11,DEMO-B11
+Demo Football Academy,Demo Centre 1,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,booked,DEMO-T12,DEMO-B12
+Demo Football Academy,Demo Centre 1,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,cancelled,DEMO-T13,DEMO-B13
+Demo Badminton Academy,Demo Centre 2,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,booked,DEMO-P21,DEMO-B21
+Demo Badminton Academy,Demo Centre 2,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,booked,DEMO-T22,DEMO-B22
+Demo Badminton Academy,Demo Centre 2,U12,Demo Beginner,2026-10-27,6:00 PM,7:00 PM,cancelled,DEMO-T23,DEMO-B23

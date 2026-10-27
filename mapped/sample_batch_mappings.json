@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "clubs": {
+    "44a238d789e28f8633fa0640267559dc9d0a2d749ed54faecadb5c5127165ef7": {
+      "target": {
+        "academy_id": "DEMO-A1",
+        "academy": "Demo Football Academy",
+        "center": "Demo Centre 1",
+        "sport": "Football"
+      },
+      "approved_at": "2026-10-27T17:51:16+05:30"
+    },
+    "4107e605131180365bf0a865637b3da4750825cf7fa477489c702e34909c9408": {
+      "target": {
+        "academy_id": "DEMO-A2",
+        "academy": "Demo Badminton Academy",
+        "center": "Demo Centre 2",
+        "sport": "Badminton"
+      },
+      "approved_at": "2026-10-27T17:51:16+05:30"
+    }
+  },
+  "batches": {
+    "8464744f99626df158c67d230b9c32fd7a49a08d6113d07ddec0a88c51b25659": {
+      "definition": {
+        "center": "Demo Centre 1",
+        "city": "Demo City",
+        "sport": "Football",
+        "weekday": "Tuesday",
+        "time": "6:00 PM - 7:00 PM",
+        "division": "Open",
+        "capacity": 5,
+        "days": "Tuesday"
+      },
+      "target": {
+        "academy_id": "DEMO-A1",
+        "academy": "Demo Football Academy",
+        "center": "Demo Centre 1",
+        "sport": "Football"
+      },
+      "age": "",
+      "proficiency_pairs": [],
+      "source_name": "sample_capacity.csv",
+      "source_hash": "437ad8b689311b4ff699aee8ebea447489e9ea06a7a35d81082878fa69ab1c8d",
+      "approved_at": "2026-10-27T17:51:16+05:30"
+    },
+    "d9a5e933c2025d033b9eab258d1c161eef38bfc23863e9b058e9558d6962500b": {
+      "definition": {
+        "center": "Demo Centre 2",
+        "city": "Demo City",
+        "sport": "Badminton",
+        "weekday": "Tuesday",
+        "time": "6:00 PM - 7:00 PM",
+        "division": "Open",
+        "capacity": 3,
+        "days": "Tuesday"
+      },
+      "target": {
+        "academy_id": "DEMO-A2",
+        "academy": "Demo Badminton Academy",
+        "center": "Demo Centre 2",
+        "sport": "Badminton"
+      },
+      "age": "",
+      "proficiency_pairs": [],
+      "source_name": "sample_capacity.csv",
+      "source_hash": "437ad8b689311b4ff699aee8ebea447489e9ea06a7a35d81082878fa69ab1c8d",
+      "approved_at": "2026-10-27T17:51:16+05:30"
+    }
+  }
+}
