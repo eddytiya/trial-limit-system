@@ -1,89 +1,124 @@
 # Trial Limit System
 
-A local dashboard for reviewing trial bookings, enrollment, batch capacity,
-and occupancy. Source snapshots and approved mapping records stay local.
+A local dashboard for reviewing enrollment, trial bookings, batch capacity, and occupancy. Upload source snapshots, inspect capacity by center or sport, and calculate whether a selected batch has room for additional trials.
 
-## Quick start (Windows CMD)
+## Quick start
 
-Requires Python 3.10 or newer.
+Requires **Python 3.10 or newer**. Run these commands in Windows CMD from the project folder:
 
 ```cmd
-cd /d "C:\Users\biswajit.das\Desktop\Trial limit System"
 python -m venv .venv
 .venv\Scripts\activate
 python -m pip install -r app\requirements.txt
 start.cmd
 ```
 
-Open http://127.0.0.1:8765/ and upload your source exports. Stop the server
-with Ctrl+C. Local input files, mapping records, and generated reports are
-excluded from Git. A fresh clone requires your own exports; configured-file
-views also require matching paths in `app/config.json` and applicable mappings.
+Open **http://127.0.0.1:8765/**. Keep the terminal open; press **Ctrl+C** to stop the server.
 
-See [GitHub publishing instructions](docs/GITHUB_SETUP.md) for Windows CMD
-commands to publish under `eddytiya/trial-limit-system`.
+PowerShell users can run `python app/frontend.py` or `./start.ps1` after installing the requirements. Runtime dependencies are listed in `app/requirements.txt`; spreadsheet or document-generation packages are not required to run the dashboard.
+
+## Dashboard preview
+
+The current upload screen, shown at a narrow browser width before files are selected. No private source data is included in this screenshot.
+
+<img src="docs/screenshots/dashboard-upload.png" alt="Center inventory dashboard showing enrollment, trial and capacity uploads, analysis date, and batch calculation templates" width="340">
+
+## Use the dashboard
+
+1. Upload the **Enrollment CSV**, **Trial bookings** CSV or Query result XLSX, and **Capacity schedule** CSV or MAIN XLSX.
+2. Choose the **Analysis date**. Inventory views use the batches for that date's weekday.
+3. Review the available reports:
+
+   | View | Purpose |
+   | --- | --- |
+   | Daily report | Review batches by center and sport, capacity, reported counts, and places left. |
+   | Over-capacity batches | Find batches whose reported counts exceed capacity. |
+   | Weekly center view | Inspect a selected center's weekly schedule and filter by sport. |
+   | Sport view | Review sport groupings, including over-capacity sections. |
+   | Sports-only summary | Inspect the sport-level summary. |
+
+4. In **Batch calculation**, select a capacity batch and its exact enrollment academy, center, and sport. Review any restored approved mapping. For a restricted proficiency pool, select every exact age/course membership covered by the capacity; **Open** covers all ages/courses.
+5. Confirm the source link, then click **Calculate selected batch**. Review occupancy, remaining places, and any unresolved issues before downloading the calculation as CSV.
+
+The **Batch calculation** panel includes blank CSV templates and expandable **File requirements and counting rules**. Templates are separate downloads; original source files are never converted or overwritten.
+
+## Input files
+
+| Source | Supported formats | Important details |
+| --- | --- | --- |
+| Enrollment | CSV | Exact academy/center/sport, age/course, shared Player DB ID, start/end dates, and slots. Enrollment dates accept `YYYY-MM-DD` and the original export's `DD-MM-YYYY` format. |
+| Trial bookings | CSV or Query result XLSX | Scheduled date, time, status, scope, and identity fields. Trial dates use `YYYY-MM-DD`. Shared Player DB ID and Trial Booking ID support reliable deduplication and conflict checks. |
+| Capacity schedule | CSV or MAIN XLSX | Sport, center, batch time, weekday, total capacity, city, and proficiency. Reported counts remain snapshot values. |
+
+Slots retain their original weekday/time strings, such as `Monday 6:00 PM - 7:00 PM`. Download the templates for the exact CSV column names.
+
+A fresh clone does not contain local source snapshots or approved mappings. Use your own exports. For configured-file views, place the required sources in `input/` and update `app/config.json`; relative paths resolve from the project folder. The configured historical capacity filename may be absent, so upload current snapshots for the upload workflow. Restore authorized mapping records into `mapped/` when needed.
+
+## How counts work
+
+- Inventory **Currently active** values are reported counts from the uploaded capacity schedule, not verified live enrollment.
+- Selected-batch calculations separate enrolled students, booked trial rows, duplicate trials, trials already enrolled, occupancy preview, confirmed occupancy, remaining places, and known excess.
+- Shared student IDs deduplicate within a selected session/pool across courses. Separate sessions have separate capacities. Enrollment date boundaries are inclusive; the export's Active field is ignored.
+- Cancelled trials are excluded. Conflicting booking IDs, missing identities, malformed records, or unresolved eligibility can prevent confirmed totals and remaining places. Name/mobile fallback remains provisional.
+- Reported capacity-file counts are not added to calculated enrollment occupancy. Similarity alone never approves a mapping.
+
+Calculations do not create bookings or save mapping approvals. Editing the target or memberships creates a temporary manual selection; **Restore approved mapping** resets it. Saved mappings are rejected when their capacity definitions or membership targets change.
+
+## Local data and exports
+
+Source snapshots and approval records remain read-only. Approved mappings use `mapped/approved_batch_mappings.json`; source-specific center overrides use `mapped/capacity_center_overrides.json`.
+
+Browser storage remembers uploaded snapshots. Replace a snapshot when its owner provides a newer export, or use **Forget saved files**. Changing files, date, or selected scope clears the previous calculation.
+
+Calculation CSV exports include the analysis date, selected scope, source SHA-256 fingerprints, and review issues. Detailed upload diagnostics are stored outside the dashboard in `reports/`, with a `report.md` summary and `details.json`. Identical inputs and results reuse their report; different inputs, dates, or calculations produce a separate folder.
+
+Local input files, mappings, generated reports, credentials, caches, and virtual environments are excluded by `.gitignore`. Documentation screenshots live in `docs/screenshots/` so they can be committed with this README.
 
 ## Project layout
 
 ```text
-Trial limit System/
-  app/           Application Python modules, HTML views, config and requirements
-  input/         Original enrollment CSV and trial/capacity XLSX snapshots
-  mapped/        Approved mappings, center overrides and mapping-review CSV exports
-  tests/         Automated tests and test runner
-  tools/         UI verification scripts
-    archive/     Historical audit, approval and document-generation scripts
-  outputs/       Generated reports, audit evidence and exports
-    previews/    UI screenshots
-    logs/        Previous validation logs
-  docs/          Historical development notes
-  start.ps1      Dashboard launcher
+app/          Python application, HTML/JavaScript views, config, requirements
+input/        Local enrollment, trial, and capacity snapshots (ignored)
+mapped/       Local approved mappings and overrides (ignored)
+outputs/      Generated analysis, exports, and audit evidence (ignored)
+reports/      Upload diagnostics (ignored)
+tests/        Automated Python tests and test runner
+tools/        UI checks and verification utilities
+tools/archive/ Historical audit and document-generation scripts
+docs/         Setup instructions, screenshots, and development history
+start.cmd     Windows CMD launcher
+start.ps1     PowerShell launcher
 ```
 
-## Start the dashboard
+## Validation
 
-From the project directory:
+Run the Python test suite:
 
-```powershell
-python -m pip install -r app/requirements.txt
-.\start.ps1
+```cmd
+python tests\run_tests.py
 ```
 
-Or run `python app/frontend.py` and open http://127.0.0.1:8765/.
-Python 3.10 or newer is required. Runtime code uses the Python standard library plus `tzdata` for Windows timezone support; dependencies are listed in `app/requirements.txt`. No spreadsheet or document-generation packages are required to run the app.
+With Node.js installed, run the relevant UI logic checks:
 
-## Source files and mappings
-
-`app/config.json` points to the local files in `input/`. Relative paths resolve from the project folder, regardless of the terminal working directory. Original filenames and source contents are preserved. The capacity file named `Greenfield Batch & Coach details (1).xlsx` is the configured snapshot copied from Downloads; the earlier reference workbook is also retained in `input/`.
-
-Approved mappings are persisted in `mapped/approved_batch_mappings.json`; source-specific center overrides are in `mapped/capacity_center_overrides.json`. The mapping-review CSVs are reference exports, not replacements for the approval registry. Source CSVs and XLSX files belong in `input/`; generated data-quality and audit CSVs stay in `outputs/`.
-
-The screen accepts uploads from `input/`. Uploads are snapshots; reselect them after a source file changes. Views include Daily report, Over-capacity batches, Weekly center view and Sport view with All data / Over capacity sections. Reported counts are taken from the uploaded weekday capacity snapshot.
-
-## Checks
-
-```powershell
-python tests/run_tests.py
+```cmd
+node tools/upload-workflow-check.js
 node tools/sport-view-check.js
 node tools/sport-overcapacity-check.js
 ```
 
-Historical scripts in `tools/archive/` are retained for traceability. They contain old snapshot paths and assumptions and are not production entry points; approval scripts must not be rerun casually. Previous documentation is in `docs/HISTORY.md`. The move manifest and verified file hashes are in `outputs/filesystem_migration_2026-10-22.json`.
+The optional real-snapshot check, `python tools/verify_upload_snapshots.py`, requires local source files and existing approved links. It writes `outputs/upload_workflow_verification.json` and does not grant approvals. Historical analysis/export scripts may depend on private snapshots and machine-specific tooling. Scripts in `tools/archive/` retain old assumptions and paths; review them before use, especially approval scripts.
 
+## GitHub
 
-## Read-only upload workflow
+Repository: [eddytiya/trial-limit-system](https://github.com/eddytiya/trial-limit-system).
 
-Upload the original enrollment CSV, trial CSV / Query result XLSX, and capacity CSV / MAIN XLSX. The **Batch calculation** panel provides blank CSV templates and calculation controls; diagnostics are saved separately under `reports/`. Templates are separate downloads: existing input files are never converted or overwritten. Enrollment dates accept YYYY-MM-DD and the original export's DD-MM-YYYY format; trial dates use YYYY-MM-DD. Slots retain their original weekday/time strings.
+See [Windows CMD publishing instructions](docs/GITHUB_SETUP.md). After reviewing changes, publish updates with:
 
-Choose the capacity batch and exact enrollment academy/center/sport. For a restricted proficiency pool, select all exact age/course memberships covered by its capacity; Open covers every age/course. Confirm the source link, then click **Calculate selected batch**. This temporary link does not edit sources or save mapping approvals. Missing/ambiguous links need review; similarity never approves a match.
+```cmd
+git add README.md docs/screenshots
+git diff --cached --stat
+git commit -m "Update README with dashboard screenshot and usage guide"
+git push
+```
 
-The result separates enrolled students, booked trial rows, duplicate trials, trials already enrolled, occupancy preview, confirmed occupancy, remaining places, and known excess. Shared student IDs deduplicate within the selected pool across courses. Cancelled trial records are excluded; conflicting booking IDs require review. Missing IDs, malformed records and unresolved eligibility withhold confirmed totals and remaining places. Name/mobile fallback remains provisional. Reported capacity-file counts stay in the inventory views and are not added to calculated occupancy.
-
-Download the selected calculation as CSV, including the analysis date, scope, source SHA-256 fingerprints and review issues. Changing a file, date or selected scope clears the prior calculation. Browser storage remembers uploaded snapshots; replace a snapshot when its owner provides a new export.
-
-Validation: `python tests/run_tests.py`, `node tools/upload-workflow-check.js`. The read-only real-snapshot check is `python tools/verify_upload_snapshots.py`; its report is `outputs/upload_workflow_verification.json`. That script explicitly uses the available capacity `(2)` snapshot and existing approved links; it does not grant new approvals. The older configured capacity filename may be absent, so use uploads for the current workflow.
-
-
-Upload diagnostics are stored in `reports/`, outside the dashboard. Each analysis creates a folder containing `report.md` (grouped summary and source fingerprints) and `details.json` (every issue and any selected calculation). Identical snapshots reuse their report; different inputs, analysis dates or calculation results create a separate folder. The dashboard API does not send the detailed validation list to the page. Source files and mapping approvals remain read-only.
-
-Selecting a batch restores its current approved academy/center/sport and age/course scope. Review and confirm before calculating. Editing the target or memberships creates a temporary manual selection; **Restore approved mapping** resets it. Backend checks still reject saved mappings when capacity definitions or approved membership targets change. This workflow reads approval records without modifying them.
+Development history is in [docs/HISTORY.md](docs/HISTORY.md). Historical migration evidence remains in the local `outputs/` directory.
